@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KSV 74 e.V. – Kröppelshagener Sportverein von 1974</title>
     <link rel="icon" type="image/jpeg" href="KSV_Wappen.jpg">
-    <!-- Tailwind CSS CDN für modernes Design ohne Build-Tools -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -24,8 +23,27 @@
                 }
             }
         }
+
+        // =========================================================================
+        // HIER KANNST DU DIE MONATSBEITRÄGE (IN EURO) FÜR DEN RECHNER ANPASSEN:
+        // =========================================================================
+        const beitragsConfig = {
+            grundbeitrag: {
+                erwachsene: 10.00,   // Grundbeitrag Erwachsene pro Monat
+                kinder: 6.00,        // Grundbeitrag Kinder / Jugendliche pro Monat
+                familie: 22.00,      // Grundbeitrag Familien / Paare pro Monat
+                passiv: 4.00         // Förder- / Passive Mitgliedschaft pro Monat
+            },
+            spartenZuschlag: {
+                tischtennis: 3.00,   // Zusatzbeitrag Tischtennis pro Monat
+                kinderturnen: 0.00,  // Zusatzbeitrag Kinderturnen pro Monat
+                yoga: 5.00,          // Zusatzbeitrag Yoga pro Monat
+                fitness: 2.00,       // Zusatzbeitrag Fitness für Frauen pro Monat
+                gymnastik: 2.00,     // Zusatzbeitrag Tänzerische Gymnastik pro Monat
+                fussball: 4.00       // Zusatzbeitrag Fußball pro Monat
+            }
+        };
     </script>
-    <!-- Alpine.js für kleine Interaktionen (Mobile Menu, Modals, Filter) -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -34,7 +52,7 @@
 </head>
 <body class="bg-ksv-light text-slate-800 antialiased" x-data="{ mobileMenuOpen: false, imprintOpen: false, privacyOpen: false }">
 
-    <!-- Top-Bar / Kontakt-Leiste -->
+    <!-- Top-Bar -->
     <div class="bg-ksv-green text-white text-xs sm:text-sm py-2 px-4">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-4">
@@ -51,7 +69,6 @@
     <!-- Navigation -->
     <header class="sticky top-0 z-45 bg-white/95 backdrop-blur shadow-sm border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Logo & Vereinsname -->
             <a href="#" class="flex items-center gap-3 group">
                 <img src="KSV_Wappen.jpg" alt="KSV 74 e.V. Wappen" class="h-12 w-12 object-contain rounded-lg shadow-sm border border-gray-200 group-hover:scale-105 transition">
                 <div>
@@ -60,23 +77,20 @@
                 </div>
             </a>
 
-            <!-- Desktop Menü -->
-            <nav class="hidden lg:flex items-center gap-8 font-medium text-sm">
+            <nav class="hidden lg:flex items-center gap-7 font-medium text-sm">
                 <a href="#start" class="text-ksv-green font-semibold hover:text-ksv-accent transition">Startseite</a>
                 <a href="#sparten" class="text-gray-600 hover:text-ksv-green transition">Sparten</a>
                 <a href="#kursplan" class="text-gray-600 hover:text-ksv-green transition">Kursplan</a>
+                <a href="#mitgliedschaft" class="text-gray-600 hover:text-ksv-green transition">Beiträge & Antrag</a>
                 <a href="#sportstaetten" class="text-gray-600 hover:text-ksv-green transition">Sportstätten</a>
-                <a href="#vorstand" class="text-gray-600 hover:text-ksv-green transition">Vorstand & Kontakt</a>
             </nav>
 
-            <!-- CTA Button -->
             <div class="hidden lg:block">
-                <a href="#kursplan" class="bg-ksv-green hover:bg-ksv-greenLight text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow-sm transition">
-                    Zum Kursplan
+                <a href="#mitgliedschaft" class="bg-ksv-green hover:bg-ksv-greenLight text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow-sm transition">
+                    Mitglied werden
                 </a>
             </div>
 
-            <!-- Mobile Menü Button -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -85,13 +99,12 @@
             </button>
         </div>
 
-        <!-- Mobile Dropdown -->
         <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="lg:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-6 space-y-3">
             <a @click="mobileMenuOpen = false" href="#start" class="block py-2 text-gray-700 font-medium border-b border-gray-50">Startseite</a>
             <a @click="mobileMenuOpen = false" href="#sparten" class="block py-2 text-gray-700 font-medium border-b border-gray-50">Sparten</a>
             <a @click="mobileMenuOpen = false" href="#kursplan" class="block py-2 text-gray-700 font-medium border-b border-gray-50">Kursplan</a>
-            <a @click="mobileMenuOpen = false" href="#sportstaetten" class="block py-2 text-gray-700 font-medium border-b border-gray-50">Sportstätten</a>
-            <a @click="mobileMenuOpen = false" href="#vorstand" class="block py-2 text-gray-700 font-medium">Vorstand & Kontakt</a>
+            <a @click="mobileMenuOpen = false" href="#mitgliedschaft" class="block py-2 text-gray-700 font-medium border-b border-gray-50">Beiträge & Antrag</a>
+            <a @click="mobileMenuOpen = false" href="#sportstaetten" class="block py-2 text-gray-700 font-medium">Sportstätten</a>
         </div>
     </header>
 
@@ -114,8 +127,8 @@
                         <a href="#kursplan" class="bg-ksv-accent hover:bg-ksv-accentHover text-slate-900 font-semibold px-7 py-3.5 rounded-xl shadow-lg transition">
                             Aktueller Kursplan
                         </a>
-                        <a href="#sparten" class="bg-white/10 hover:bg-white/20 text-white font-medium px-7 py-3.5 rounded-xl border border-white/20 transition">
-                            Unsere Sparten
+                        <a href="#mitgliedschaft" class="bg-white/10 hover:bg-white/20 text-white font-medium px-7 py-3.5 rounded-xl border border-white/20 transition">
+                            Beitrag berechnen & eintreten
                         </a>
                     </div>
                 </div>
@@ -140,7 +153,7 @@
         </div>
     </section>
 
-    <!-- Wichtiger Hinweis (Kinderturnen Umzug) -->
+    <!-- Wichtiger Hinweis -->
     <section class="bg-amber-50 border-y border-amber-200 py-4 px-4 text-amber-900 text-sm">
         <div class="max-w-7xl mx-auto flex items-center gap-3">
             <span class="text-xl">ℹ️</span>
@@ -150,11 +163,11 @@
         </div>
     </section>
 
-    <!-- Sparten / Angebote -->
+    <!-- Sparten / Angebote (Alle Namen aufgeführt, Telefonnummern entfernt, nur E-Mail) -->
     <section id="sparten" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 class="text-3xl font-bold text-ksv-green tracking-tight">Unsere Sparten</h2>
-            <p class="text-gray-600">Für jede Altersgruppe und jeden Fitnessgrad das passende Angebot in unserer Gemeinschaft.</p>
+            <p class="text-gray-600">Für jede Altersgruppe und jeden Fitnessgrad das passende Angebot. Kontaktiere die Spartenleitungen bequem per E-Mail.</p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -165,9 +178,12 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Tischtennis</h3>
                     <p class="text-gray-600 text-sm mb-4">Punktspiele und Training in der Turnhalle Escheburg.</p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1">
-                    <p><strong>Obmann:</strong> Rolf Bockholt (Tel.: 04152 8853780)</p>
+                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1.5">
+                    <p><strong>Obmann:</strong> Rolf Bockholt</p>
                     <p><strong>Training:</strong> Mo & Do ab 19:00 Uhr</p>
+                    <a href="mailto:tischtennis@ksv74.de" class="inline-flex items-center gap-1.5 text-ksv-green font-semibold hover:underline pt-1">
+                        ✉️ tischtennis@ksv74.de
+                    </a>
                 </div>
             </div>
 
@@ -178,10 +194,13 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Kinderturnen</h3>
                     <p class="text-gray-600 text-sm mb-4">Von Mini-Movers mit Eltern bis zu den Turnraketen und Flitzekids in Escheburg.</p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1">
-                    <p><strong>Obfrau:</strong> Jennifer Stahl (Tel.: 0151 28954387)</p>
-                    <p><strong>Stellv.:</strong> Julia Lindner (Tel.: 0179 7837156)</p>
-                    <p><strong>Üb.-leiterin:</strong> Ramona Ewald</p>
+                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1.5">
+                    <p><strong>Obfrau:</strong> Jennifer Stahl</p>
+                    <p><strong>Stellv. Obfrau:</strong> Julia Lindner</p>
+                    <p><strong>Übungsleiterin:</strong> Ramona Ewald</p>
+                    <a href="mailto:kinderturnen@ksv74.de" class="inline-flex items-center gap-1.5 text-ksv-green font-semibold hover:underline pt-1">
+                        ✉️ kinderturnen@ksv74.de
+                    </a>
                 </div>
             </div>
 
@@ -192,10 +211,13 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Yoga</h3>
                     <p class="text-gray-600 text-sm mb-4">Entspannung und Bewegung für Körper und Geist in der KiTa Kröppelshagen.</p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1">
-                    <p><strong>Obfrau:</strong> Susann Kirsch (Tel.: 0178 6609047)</p>
-                    <p><strong>Üb.-leiterin:</strong> Maren Marquardt (Tel.: 0160 91032414)</p>
+                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1.5">
+                    <p><strong>Obfrau:</strong> Susann Kirsch</p>
+                    <p><strong>Übungsleiterin:</strong> Maren Marquardt</p>
                     <p><strong>Termin:</strong> Dienstag, 19:30 – 21:00 Uhr</p>
+                    <a href="mailto:yoga@ksv74.de" class="inline-flex items-center gap-1.5 text-ksv-green font-semibold hover:underline pt-1">
+                        ✉️ yoga@ksv74.de
+                    </a>
                 </div>
             </div>
 
@@ -206,9 +228,13 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Fitness für Frauen</h3>
                     <p class="text-gray-600 text-sm mb-4">Gezieltes Workout und Ausdauertraining in der KiTa Kröppelshagen.</p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1">
-                    <p><strong>Üb.-leiterinnen:</strong> Andrea Vorwerk (Tel. 04104 9629932), Andrea Hartung (Tel. 04104/969315)</p>
+                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1.5">
+                    <p><strong>Obfrau:</strong> Andrea Vorwerk</p>
+                    <p><strong>Übungsleiterin:</strong> Andrea Hartung</p>
                     <p><strong>Termin:</strong> Mittwoch, 19:30 – 20:30 Uhr</p>
+                    <a href="mailto:fitness@ksv74.de" class="inline-flex items-center gap-1.5 text-ksv-green font-semibold hover:underline pt-1">
+                        ✉️ fitness@ksv74.de
+                    </a>
                 </div>
             </div>
 
@@ -219,10 +245,13 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Tänzerische Gymnastik</h3>
                     <p class="text-gray-600 text-sm mb-4">Bewegung zu Musik und Gymnastik im Lindenhof.</p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1">
-                    <p><strong>Obfrau:</strong> Hilke Räthke (Tel.: 04104/5010)</p>
-                    <p><strong>Üb.-leiterin:</strong> Ebba Hamester (Tel.: 04104/1302)</p>
+                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1.5">
+                    <p><strong>Obfrau:</strong> Hilke Räthke</p>
+                    <p><strong>Übungsleiterin:</strong> Ebba Hamester</p>
                     <p><strong>Termin:</strong> Donnerstag, 15:00 – 16:00 Uhr</p>
+                    <a href="mailto:gymnastik@ksv74.de" class="inline-flex items-center gap-1.5 text-ksv-green font-semibold hover:underline pt-1">
+                        ✉️ gymnastik@ksv74.de
+                    </a>
                 </div>
             </div>
 
@@ -233,24 +262,26 @@
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Fußball</h3>
                     <p class="text-gray-600 text-sm mb-4">Training auf dem Sportplatz Kröppelshagen. Wir suchen noch Mitglieder zur Bildung einer Punktspielmannschaft!</p>
                 </div>
-                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1">
-                    <p><strong>Obmann:</strong> Niels Kummer (Tel.: 0162 9859110)</p>
-                    <p><strong>Trainer:</strong> A. Langner (Tel.: 0179/3639306)</p>
+                <div class="border-t border-gray-100 pt-4 text-xs text-gray-500 space-y-1.5">
+                    <p><strong>Obmann:</strong> Niels Kummer</p>
+                    <p><strong>Trainer:</strong> A. Langner</p>
                     <p><strong>Training:</strong> Mittwoch & Sonntag</p>
+                    <a href="mailto:fussball@ksv74.de" class="inline-flex items-center gap-1.5 text-ksv-green font-semibold hover:underline pt-1">
+                        ✉️ fussball@ksv74.de
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Kursplan Sektion -->
-    <section id="kursplan" class="bg-gray-50 py-20 px-4 sm:px-6 lg:px-8 border-y border-gray-200" x-data="{ selectedDay: 'alle', selectedSparte: 'alle' }">
+    <section id="kursplan" class="bg-gray-50 py-20 px-4 sm:px-6 lg:px-8 border-y border-gray-200" x-data="{ selectedDay: 'alle' }">
         <div class="max-w-7xl mx-auto">
             <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
                 <h2 class="text-3xl font-bold text-ksv-green tracking-tight">Wochenplan & Kursübersicht</h2>
-                <p class="text-gray-600">Alle sportlichen Veranstaltungen des KSV 74 e.V. (Stand: ab 01. November 2026). Filtere bequem nach Wochentag oder Sportart.</p>
+                <p class="text-gray-600">Alle sportlichen Veranstaltungen des KSV 74 e.V. (Stand: ab 01. November 2026).</p>
             </div>
 
-            <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-2 mb-8">
                 <button @click="selectedDay = 'alle'" :class="selectedDay === 'alle' ? 'bg-ksv-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'" class="px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition">Alle Tage</button>
                 <button @click="selectedDay = 'Montag'" :class="selectedDay === 'Montag' ? 'bg-ksv-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'" class="px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition">Montag</button>
@@ -260,7 +291,6 @@
                 <button @click="selectedDay = 'Sonntag'" :class="selectedDay === 'Sonntag' ? 'bg-ksv-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'" class="px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition">Sonntag</button>
             </div>
 
-            <!-- Tabelle / Kursliste -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -270,26 +300,32 @@
                                 <th class="py-4 px-6">Uhrzeit</th>
                                 <th class="py-4 px-6">Angebot / Sparte</th>
                                 <th class="py-4 px-6">Sportstätte</th>
-                                <th class="py-4 px-6">Verantwortliche & Kontakt</th>
+                                <th class="py-4 px-6">Verantwortliche & E-Mail</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
-                            <!-- Montag 1 -->
+                            <!-- Montag -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Montag'" class="hover:bg-gray-50/80 transition">
                                 <td class="py-4 px-6 font-semibold text-ksv-green">Montag</td>
                                 <td class="py-4 px-6 whitespace-nowrap">19:00 – 23:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Tischtennis (Punktspiel KSV)</td>
                                 <td class="py-4 px-6">Turnhalle Escheburg</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obmann: Rolf Bockholt<br><a href="tel:041528853780" class="text-ksv-green hover:underline">Tel.: 04152 8853780</a></td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obmann: Rolf Bockholt</div>
+                                    <a href="mailto:tischtennis@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ tischtennis@ksv74.de</a>
+                                </td>
                             </tr>
-
                             <!-- Dienstag 1 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Dienstag'" class="hover:bg-gray-50/80 transition">
                                 <td class="py-4 px-6 font-semibold text-ksv-green">Dienstag</td>
                                 <td class="py-4 px-6 whitespace-nowrap">15:30 – 16:15 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Junge Turner (Powerbande, ca. 5½–7½ J.)</td>
                                 <td class="py-4 px-6">Turnhalle Escheburg</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obfrau: J. Stahl (<a href="tel:015128954387" class="text-ksv-green hover:underline">0151 28954387</a>)<br>Üb.-l.: Ramona Ewald</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Jennifer Stahl | Stellv.: Julia Lindner</div>
+                                    <div>Üb.-leiterin: Ramona Ewald</div>
+                                    <a href="mailto:kinderturnen@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ kinderturnen@ksv74.de</a>
+                                </td>
                             </tr>
                             <!-- Dienstag 2 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Dienstag'" class="hover:bg-gray-50/80 transition">
@@ -297,7 +333,11 @@
                                 <td class="py-4 px-6 whitespace-nowrap">16:15 – 17:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Große Turner (Turnraketen, ca. 7½–9½ J.)</td>
                                 <td class="py-4 px-6">Turnhalle Escheburg</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obfrau: J. Stahl (<a href="tel:015128954387" class="text-ksv-green hover:underline">0151 28954387</a>)<br>Üb.-l.: Ramona Ewald</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Jennifer Stahl | Stellv.: Julia Lindner</div>
+                                    <div>Üb.-leiterin: Ramona Ewald</div>
+                                    <a href="mailto:kinderturnen@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ kinderturnen@ksv74.de</a>
+                                </td>
                             </tr>
                             <!-- Dienstag 3 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Dienstag'" class="hover:bg-gray-50/80 transition">
@@ -305,16 +345,22 @@
                                 <td class="py-4 px-6 whitespace-nowrap">19:30 – 21:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Yoga</td>
                                 <td class="py-4 px-6">KiTa Kröppelshagen</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obfrau: S. Kirsch (<a href="tel:01786609047" class="text-ksv-green hover:underline">0178 6609047</a>)<br>Üb.-l.: Maren Marquardt (<a href="tel:016091032414" class="text-ksv-green hover:underline">0160 91032414</a>)</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Susann Kirsch | Üb.-leiterin: Maren Marquardt</div>
+                                    <a href="mailto:yoga@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ yoga@ksv74.de</a>
+                                </td>
                             </tr>
-
                             <!-- Mittwoch 1 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Mittwoch'" class="hover:bg-gray-50/80 transition">
                                 <td class="py-4 px-6 font-semibold text-ksv-green">Mittwoch</td>
                                 <td class="py-4 px-6 whitespace-nowrap">15:45 – 16:30 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Kleine Turner mit Eltern (Mini-Mover, ca. 1½–3 J.)</td>
                                 <td class="py-4 px-6">Turnhalle Escheburg</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obfrau: J. Stahl (<a href="tel:015128954387" class="text-ksv-green hover:underline">0151 28954387</a>)<br>Üb.-l.: Ramona Ewald</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Jennifer Stahl | Stellv.: Julia Lindner</div>
+                                    <div>Üb.-leiterin: Ramona Ewald</div>
+                                    <a href="mailto:kinderturnen@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ kinderturnen@ksv74.de</a>
+                                </td>
                             </tr>
                             <!-- Mittwoch 2 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Mittwoch'" class="hover:bg-gray-50/80 transition">
@@ -322,7 +368,11 @@
                                 <td class="py-4 px-6 whitespace-nowrap">16:30 – 17:30 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Kleine Turner ohne Eltern (Flitzekids, ca. 3½–5 J.)</td>
                                 <td class="py-4 px-6">Turnhalle Escheburg</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obfrau: J. Stahl (<a href="tel:015128954387" class="text-ksv-green hover:underline">0151 28954387</a>)<br>Üb.-l.: Ramona Ewald</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Jennifer Stahl | Stellv.: Julia Lindner</div>
+                                    <div>Üb.-leiterin: Ramona Ewald</div>
+                                    <a href="mailto:kinderturnen@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ kinderturnen@ksv74.de</a>
+                                </td>
                             </tr>
                             <!-- Mittwoch 3 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Mittwoch'" class="hover:bg-gray-50/80 transition">
@@ -330,7 +380,10 @@
                                 <td class="py-4 px-6 whitespace-nowrap">19:30 – 20:30 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Fitness für Frauen</td>
                                 <td class="py-4 px-6">KiTa Kröppelshagen</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Üb.-l.: A. Vorwerk (<a href="tel:041049629932" class="text-ksv-green hover:underline">04104 9629932</a>)<br>Andrea Hartung (<a href="tel:04104969315" class="text-ksv-green hover:underline">04104 969315</a>)</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Andrea Vorwerk | Üb.-leiterin: Andrea Hartung</div>
+                                    <a href="mailto:fitness@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ fitness@ksv74.de</a>
+                                </td>
                             </tr>
                             <!-- Mittwoch 4 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Mittwoch'" class="hover:bg-gray-50/80 transition">
@@ -338,16 +391,21 @@
                                 <td class="py-4 px-6 whitespace-nowrap">19:00 – 21:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Fußballtraining</td>
                                 <td class="py-4 px-6">Sportplatz Kröppelshagen</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obmann: Niels Kummer (<a href="tel:01629859110" class="text-ksv-green hover:underline">0162 9859110</a>)<br>Trainer: A. Langner (<a href="tel:01793639306" class="text-ksv-green hover:underline">0179 3639306</a>)</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obmann: Niels Kummer | Trainer: A. Langner</div>
+                                    <a href="mailto:fussball@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ fussball@ksv74.de</a>
+                                </td>
                             </tr>
-
                             <!-- Donnerstag 1 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Donnerstag'" class="hover:bg-gray-50/80 transition">
                                 <td class="py-4 px-6 font-semibold text-ksv-green">Donnerstag</td>
                                 <td class="py-4 px-6 whitespace-nowrap">15:00 – 16:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Tänzerische Gymnastik</td>
                                 <td class="py-4 px-6">Lindenhof</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obfrau: Hilke Räthke (<a href="tel:041045010" class="text-ksv-green hover:underline">04104 5010</a>)<br>Üb.-l.: Ebba Hamester (<a href="tel:041041302" class="text-ksv-green hover:underline">04104 1302</a>)</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obfrau: Hilke Räthke | Üb.-leiterin: Ebba Hamester</div>
+                                    <a href="mailto:gymnastik@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ gymnastik@ksv74.de</a>
+                                </td>
                             </tr>
                             <!-- Donnerstag 2 -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Donnerstag'" class="hover:bg-gray-50/80 transition">
@@ -355,16 +413,21 @@
                                 <td class="py-4 px-6 whitespace-nowrap">19:30 – 23:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Tischtennis (Punktspiel ESV)</td>
                                 <td class="py-4 px-6">Turnhalle Escheburg</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obmann: Rolf Bockholt<br><a href="tel:041528853780" class="text-ksv-green hover:underline">Tel.: 04152 8853780</a></td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obmann: Rolf Bockholt</div>
+                                    <a href="mailto:tischtennis@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ tischtennis@ksv74.de</a>
+                                </td>
                             </tr>
-
-                            <!-- Sonntag 1 -->
+                            <!-- Sonntag -->
                             <tr x-show="selectedDay === 'alle' || selectedDay === 'Sonntag'" class="hover:bg-gray-50/80 transition">
                                 <td class="py-4 px-6 font-semibold text-ksv-green">Sonntag</td>
                                 <td class="py-4 px-6 whitespace-nowrap">11:00 – 13:00 Uhr</td>
                                 <td class="py-4 px-6 font-medium text-slate-900">Fußball (Training)</td>
                                 <td class="py-4 px-6">Sportplatz Kröppelshagen</td>
-                                <td class="py-4 px-6 text-xs text-gray-600">Obmann: Niels Kummer (<a href="tel:01629859110" class="text-ksv-green hover:underline">0162 9859110</a>)<br>Trainer: A. Langner (<a href="tel:01793639306" class="text-ksv-green hover:underline">0179 3639306</a>)</td>
+                                <td class="py-4 px-6 text-xs text-gray-600 space-y-0.5">
+                                    <div>Obmann: Niels Kummer | Trainer: A. Langner</div>
+                                    <a href="mailto:fussball@ksv74.de" class="text-ksv-green hover:underline font-medium block pt-0.5">✉️ fussball@ksv74.de</a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -373,48 +436,217 @@
         </div>
     </section>
 
-    <!-- Sportstätten Sektion -->
-    <section id="sportstaetten" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <h2 class="text-3xl font-bold text-ksv-green tracking-tight">Unsere Sportstätten</h2>
-            <p class="text-gray-600">Hier finden unsere Übungsstunden und Spiele statt.</p>
+    <!-- Beitragsrechner & Beitrittserklärung Download -->
+    <section id="mitgliedschaft" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" 
+             x-data="{
+                 tarif: 'erwachsene',
+                 sparten: [],
+                 toggleSparte(name) {
+                     if (this.sparten.includes(name)) {
+                         this.sparten = this.sparten.filter(s => s !== name);
+                     } else {
+                         this.sparten.push(name);
+                     }
+                 },
+                 get gesamtMonatlich() {
+                     let basis = beitragsConfig.grundbeitrag[this.tarif] || 0;
+                     if (this.tarif === 'passiv') return basis;
+                     let zuschlag = this.sparten.reduce((sum, s) => sum + (beitragsConfig.spartenZuschlag[s] || 0), 0);
+                     return basis + zuschlag;
+                 },
+                 formatEuro(val) {
+                     return val.toFixed(2).replace('.', ',') + ' €';
+                 }
+             }">
+        <div class="text-center max-w-3xl mx-auto mb-14 space-y-4">
+            <span class="inline-block bg-ksv-green/10 text-ksv-green text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                Mitgliedschaft beim KSV 74 e.V.
+            </span>
+            <h2 class="text-3xl font-bold text-ksv-green tracking-tight">Beitragsrechner & Beitrittserklärung</h2>
+            <p class="text-gray-600">Berechne hier unverbindlich deinen monatlichen Vereinsbeitrag je nach gewählter Sparte und lade dir direkt den Aufnahmeantrag herunter.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                <div class="text-2xl mb-3">🏫</div>
-                <h3 class="font-bold text-slate-900 mb-1">Turnhalle Escheburg</h3>
-                <p class="text-xs text-gray-500">Hauptstätte für Tischtennis und alle Kinder-Turngruppen.</p>
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+            <!-- Linke Spalte: Beitragsrechner -->
+            <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-200 space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">1. Mitgliedsstatus wählen</h3>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <button type="button" @click="tarif = 'erwachsene'" 
+                                :class="tarif === 'erwachsene' ? 'border-ksv-green bg-ksv-green/5 ring-2 ring-ksv-green/20' : 'border-gray-200 hover:border-gray-300'"
+                                class="p-3.5 rounded-xl border text-left transition flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold text-slate-900 text-sm">Erwachsene</div>
+                                <div class="text-xs text-gray-500">Ab 18 Jahren</div>
+                            </div>
+                            <span class="text-sm font-bold text-ksv-green" x-text="formatEuro(beitragsConfig.grundbeitrag.erwachsene)"></span>
+                        </button>
+
+                        <button type="button" @click="tarif = 'kinder'" 
+                                :class="tarif === 'kinder' ? 'border-ksv-green bg-ksv-green/5 ring-2 ring-ksv-green/20' : 'border-gray-200 hover:border-gray-300'"
+                                class="p-3.5 rounded-xl border text-left transition flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold text-slate-900 text-sm">Kinder & Jugend</div>
+                                <div class="text-xs text-gray-500">Bis 17 Jahre</div>
+                            </div>
+                            <span class="text-sm font-bold text-ksv-green" x-text="formatEuro(beitragsConfig.grundbeitrag.kinder)"></span>
+                        </button>
+
+                        <button type="button" @click="tarif = 'familie'" 
+                                :class="tarif === 'familie' ? 'border-ksv-green bg-ksv-green/5 ring-2 ring-ksv-green/20' : 'border-gray-200 hover:border-gray-300'"
+                                class="p-3.5 rounded-xl border text-left transition flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold text-slate-900 text-sm">Familien / Paare</div>
+                                <div class="text-xs text-gray-500">Gemeinsamer Haushalt</div>
+                            </div>
+                            <span class="text-sm font-bold text-ksv-green" x-text="formatEuro(beitragsConfig.grundbeitrag.familie)"></span>
+                        </button>
+
+                        <button type="button" @click="tarif = 'passiv'; sparten = []" 
+                                :class="tarif === 'passiv' ? 'border-ksv-green bg-ksv-green/5 ring-2 ring-ksv-green/20' : 'border-gray-200 hover:border-gray-300'"
+                                class="p-3.5 rounded-xl border text-left transition flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold text-slate-900 text-sm">Passives Mitglied</div>
+                                <div class="text-xs text-gray-500">Fördermitgliedschaft</div>
+                            </div>
+                            <span class="text-sm font-bold text-ksv-green" x-text="formatEuro(beitragsConfig.grundbeitrag.passiv)"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div x-show="tarif !== 'passiv'" x-transition>
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">2. Gewünschte Sparte(n) auswählen</h3>
+                    <p class="text-xs text-gray-500 mb-3">Mehrfachauswahl möglich – wähle alle Sparten aus, in denen du aktiv sein möchtest.</p>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <label @click.prevent="toggleSparte('fussball')" 
+                               :class="sparten.includes('fussball') ? 'border-ksv-green bg-ksv-green/5' : 'border-gray-200 hover:bg-gray-50'"
+                               class="p-3 rounded-xl border cursor-pointer flex items-center justify-between transition">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" :checked="sparten.includes('fussball')" class="rounded text-ksv-green focus:ring-ksv-green">
+                                <span class="text-sm font-medium text-slate-800">⚽ Fußball</span>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600" x-text="'+ ' + formatEuro(beitragsConfig.spartenZuschlag.fussball)"></span>
+                        </label>
+
+                        <label @click.prevent="toggleSparte('tischtennis')" 
+                               :class="sparten.includes('tischtennis') ? 'border-ksv-green bg-ksv-green/5' : 'border-gray-200 hover:bg-gray-50'"
+                               class="p-3 rounded-xl border cursor-pointer flex items-center justify-between transition">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" :checked="sparten.includes('tischtennis')" class="rounded text-ksv-green focus:ring-ksv-green">
+                                <span class="text-sm font-medium text-slate-800">🏓 Tischtennis</span>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600" x-text="'+ ' + formatEuro(beitragsConfig.spartenZuschlag.tischtennis)"></span>
+                        </label>
+
+                        <label @click.prevent="toggleSparte('kinderturnen')" 
+                               :class="sparten.includes('kinderturnen') ? 'border-ksv-green bg-ksv-green/5' : 'border-gray-200 hover:bg-gray-50'"
+                               class="p-3 rounded-xl border cursor-pointer flex items-center justify-between transition">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" :checked="sparten.includes('kinderturnen')" class="rounded text-ksv-green focus:ring-ksv-green">
+                                <span class="text-sm font-medium text-slate-800">🤸 Kinderturnen</span>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600" x-text="'+ ' + formatEuro(beitragsConfig.spartenZuschlag.kinderturnen)"></span>
+                        </label>
+
+                        <label @click.prevent="toggleSparte('yoga')" 
+                               :class="sparten.includes('yoga') ? 'border-ksv-green bg-ksv-green/5' : 'border-gray-200 hover:bg-gray-50'"
+                               class="p-3 rounded-xl border cursor-pointer flex items-center justify-between transition">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" :checked="sparten.includes('yoga')" class="rounded text-ksv-green focus:ring-ksv-green">
+                                <span class="text-sm font-medium text-slate-800">🧘 Yoga</span>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600" x-text="'+ ' + formatEuro(beitragsConfig.spartenZuschlag.yoga)"></span>
+                        </label>
+
+                        <label @click.prevent="toggleSparte('fitness')" 
+                               :class="sparten.includes('fitness') ? 'border-ksv-green bg-ksv-green/5' : 'border-gray-200 hover:bg-gray-50'"
+                               class="p-3 rounded-xl border cursor-pointer flex items-center justify-between transition">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" :checked="sparten.includes('fitness')" class="rounded text-ksv-green focus:ring-ksv-green">
+                                <span class="text-sm font-medium text-slate-800">💪 Fitness für Frauen</span>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600" x-text="'+ ' + formatEuro(beitragsConfig.spartenZuschlag.fitness)"></span>
+                        </label>
+
+                        <label @click.prevent="toggleSparte('gymnastik')" 
+                               :class="sparten.includes('gymnastik') ? 'border-ksv-green bg-ksv-green/5' : 'border-gray-200 hover:bg-gray-50'"
+                               class="p-3 rounded-xl border cursor-pointer flex items-center justify-between transition">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" :checked="sparten.includes('gymnastik')" class="rounded text-ksv-green focus:ring-ksv-green">
+                                <span class="text-sm font-medium text-slate-800">💃 Tänz. Gymnastik</span>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600" x-text="'+ ' + formatEuro(beitragsConfig.spartenZuschlag.gymnastik)"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Ergebnis-Box -->
+                <div class="bg-ksv-light rounded-2xl p-5 border border-ksv-green/20 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider font-semibold text-gray-500 block">Dein voraussichtlicher Monatsbeitrag</span>
+                        <span class="text-xs text-gray-500" x-text="sparten.length > 0 ? ('Inkl. ' + sparten.length + ' ausgewählte(r) Sparte(n)') : 'Grundbeitrag ohne Sparten-Zuschlag'"></span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-ksv-green" x-text="formatEuro(gesamtMonatlich) + ' / Monat'"></div>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                <div class="text-2xl mb-3">🏡</div>
-                <h3 class="font-bold text-slate-900 mb-1">KiTa Kröppelshagen</h3>
-                <p class="text-xs text-gray-500">Heimat für Yoga und Fitness für Frauen.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                <div class="text-2xl mb-3">⚽</div>
-                <h3 class="font-bold text-slate-900 mb-1">Sportplatz Kröppelshagen</h3>
-                <p class="text-xs text-gray-500">Fußballtraining mittwochs und sonntags.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                <div class="text-2xl mb-3">🏛️</div>
-                <h3 class="font-bold text-slate-900 mb-1">Lindenhof</h3>
-                <p class="text-xs text-gray-500">Veranstaltungsort für Tänzerische Gymnastik.</p>
+
+            <!-- Rechte Spalte: Download Beitrittserklärung -->
+            <div class="lg:col-span-5 bg-ksv-green text-white rounded-3xl p-6 sm:p-8 shadow-lg space-y-6">
+                <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-3xl">📄</div>
+                <div class="space-y-2">
+                    <h3 class="text-2xl font-bold">Beitrittserklärung</h3>
+                    <p class="text-gray-200 text-sm leading-relaxed">
+                        Du möchtest Teil des KSV 74 e.V. werden? Lade dir hier unseren Aufnahmeantrag als PDF-Dokument herunter, fülle ihn bequem aus und gib ihn bei deinem Übungsleiter ab oder sende ihn uns per E-Mail.
+                    </p>
+                </div>
+
+                <div class="bg-white/10 rounded-2xl p-4 text-xs text-gray-200 space-y-2 border border-white/10">
+                    <p>✅ <strong>Unverbindliches Probetraining:</strong> Komm gerne vorab 1–2 Mal zum Schnuppern vorbei!</p>
+                    <p>✅ <strong>Zahlungsweise:</strong> Gemäß Beitragsordnung des KSV 74 e.V.</p>
+                </div>
+
+                <div class="pt-2 space-y-3">
+                    <a href="Beitrittserklaerung_KSV74.pdf" download="Beitrittserklaerung_KSV74.pdf" 
+                       class="w-full bg-ksv-accent hover:bg-ksv-accentHover text-slate-900 font-bold py-4 px-6 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                        <span>⬇️ Beitrittserklärung herunterladen (PDF)</span>
+                    </a>
+                    <p class="text-[11px] text-center text-gray-300">
+                        Hinweis: Bitte lege die Datei <code class="bg-black/20 px-1.5 py-0.5 rounded">Beitrittserklaerung_KSV74.pdf</code> im selben Ordner wie die index.html ab.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Vorstand & Kontakt -->
-    <section id="vorstand" class="bg-ksv-green text-white py-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto text-center max-w-3xl space-y-6">
-            <h2 class="text-3xl font-bold tracking-tight">Fragen oder Interesse am Mitmachen?</h2>
-            <p class="text-gray-200">
-                Der KSV 74 e.V. freut sich immer über neue Gesichter in unseren Sportgruppen. Melde dich direkt bei den Verantwortlichen oder schreib uns eine E-Mail.
-            </p>
-            <div>
-                <a href="mailto:vorstand@ksv74.de" class="inline-block bg-ksv-accent hover:bg-ksv-accentHover text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg transition">
-                    E-Mail an den Vorstand senden
-                </a>
+    <!-- Sportstätten Sektion -->
+    <section id="sportstaetten" class="bg-gray-50 py-20 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-3xl font-bold text-ksv-green tracking-tight">Unsere Sportstätten</h2>
+                <p class="text-gray-600">Hier finden unsere Übungsstunden und Spiele statt.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="text-2xl mb-3">🏫</div>
+                    <h3 class="font-bold text-slate-900 mb-1">Turnhalle Escheburg</h3>
+                    <p class="text-xs text-gray-500">Hauptstätte für Tischtennis und alle Kinder-Turngruppen.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="text-2xl mb-3">🏡</div>
+                    <h3 class="font-bold text-slate-900 mb-1">KiTa Kröppelshagen</h3>
+                    <p class="text-xs text-gray-500">Heimat für Yoga und Fitness für Frauen.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="text-2xl mb-3">⚽</div>
+                    <h3 class="font-bold text-slate-900 mb-1">Sportplatz Kröppelshagen</h3>
+                    <p class="text-xs text-gray-500">Fußballtraining mittwochs und sonntags.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="text-2xl mb-3">🏛️</div>
+                    <h3 class="font-bold text-slate-900 mb-1">Lindenhof</h3>
+                    <p class="text-xs text-gray-500">Veranstaltungsort für Tänzerische Gymnastik.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -432,6 +664,7 @@
             <div class="flex flex-wrap justify-center gap-6 text-xs">
                 <button @click="imprintOpen = true" class="hover:text-white transition">Impressum</button>
                 <button @click="privacyOpen = true" class="hover:text-white transition">Datenschutz</button>
+                <a href="mailto:vorstand@ksv74.de" class="hover:text-white transition">vorstand@ksv74.de</a>
             </div>
             <div class="text-xs text-gray-500">
                 © 2026 KSV 74 e.V. Alle Rechte vorbehalten.
@@ -467,7 +700,7 @@
                 <button @click="privacyOpen = false" class="text-gray-400 hover:text-slate-800 text-xl font-bold">&times;</button>
             </div>
             <div class="text-sm space-y-3 text-gray-600">
-                <p><strong>1. Datenschutz auf einen Blick</strong><br>Die folgenden Hinweise geben einen einfachen Überblick darüber, என்ன mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.</p>
+                <p><strong>1. Datenschutz auf einen Blick</strong><br>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.</p>
                 <p><strong>2. Hosting</strong><br>Diese Website wird als statische Seite gehostet. Beim Aufruf der Seite erfasst der Hoster automatisiert technische Daten (Server-Logfiles wie IP-Adresse, Datum, Uhrzeit, Browser), die Ihr Browser übermittelt. Dies dient der technischen Bereitstellung und Absicherung.</p>
                 <p><strong>3. Cookies & Tracking</strong><br>Diese Website verwendet keine Tracking-Cookies, Analysetools oder Werbung von Drittanbietern.</p>
                 <p><strong>4. E-Mail-Kontakt</strong><br>Wenn Sie uns per E-Mail kontaktieren, werden Ihre Angaben inklusive der dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage bei uns gespeichert.</p>
